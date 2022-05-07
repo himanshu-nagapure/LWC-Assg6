@@ -8,17 +8,20 @@ import ACCOUNT_OBJINFO from '@salesforce/schema/Account';
 import RATING  from '@salesforce/schema/Account.Rating';
 import INDUSTRY_FIELD from '@salesforce/schema/Account.Industry';
 
+
 export default class AccountForm extends LightningElement {
+
     activeSections = ['A', 'B'];
     Name;
     Email;
     Phone;
     AnnualRevenue;
-    rating;
-    industry;
-
+    Rating;
+    Industry;
+    
     isNewContacts = false;
-
+    
+    @track accId;
     @track account ={};
     @track ratingPicklistOptions;
     @track industryPicklistOptions;
@@ -26,7 +29,7 @@ export default class AccountForm extends LightningElement {
     @wire( getObjectInfo ,{
         objectApiName:ACCOUNT_OBJINFO
     })
-    accountInfo
+    accountInfo;
 
     @wire(getPicklistValues,{
         recordTypeId: '$accountInfo.data.defaultRecordTypeId',
@@ -39,8 +42,8 @@ export default class AccountForm extends LightningElement {
         }
     }
     handleindustry(event){
-        this.industry = event.target.value;
-        this.account.industry= this.industry;
+        this.Industry = event.target.value;
+        this.account.Industry= this.Industry;
     }
 
     @wire(getPicklistValues,{
@@ -55,7 +58,7 @@ export default class AccountForm extends LightningElement {
         }
     }
     handleRating(event){
-        this.account.rating=event.target.value;
+        this.account.Rating=event.target.value;
 
     }
 
@@ -94,25 +97,37 @@ export default class AccountForm extends LightningElement {
     }    
 
     handleForSave(){
-        this.spinnerStatus = true;
+        // this.spinnerStatus = true;
         alert(JSON.stringify(this.account));
+        this.template.querySelector('lightning-card').classList.add('hidden');
+        this.isNewContacts = true;
+
         insertAcc({ acc : this.account})
         .then(result =>{
-            this.spinnerStatus = false;
-            this.Name='';
-            this.AccountNumber='';
-            this.rating='';
-            this.industry='';
+            // this.spinnerStatus = false;
+            this.account={};
+            this.accId = result.Id;
+            console.log("Account ID",this.accId);
             this.toastEventFire('Success','account Record is Saved','success')                      
         })
         .catch(error =>{
             this.error = error.message;
-            alert(JSON.stringify(error))
-        })
+            alert(JSON.stringify(error));
+        });
+
     }
 
+    accObj = {};
     handleForNext(){
         alert(JSON.stringify(this.account));
+        this.accObj = {
+            Name :this.Name,
+            Email :this.Email,
+            Phone :this.Phone,
+            AnnualRevenue : this.AnnualRevenue,
+            Industry :this.industry,
+            Rating : this.rating
+        }
         this.template.querySelector('lightning-card').classList.add('hidden');
         this.isNewContacts = true;
     }

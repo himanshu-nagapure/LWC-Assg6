@@ -1,5 +1,35 @@
 <template>
-    <lightning-card title="Create Related Contacts">
+    <lightning-card title="Create Related Contacts" icon-name="custom:custom63">
+        <div class="btn-add">
+            <lightning-button label="Add Contact" class="btn-add" variant="brand" icon-name="utility:adduser"
+                onclick={handleModal}></lightning-button> 
+        </div>
+        <div class="slds-m-around_medium">
+            <table class = 'table-con'>
+                <tr>
+                    <th>Last Name</th>
+                    <th>Phone</th>
+                    <th>Add / Delete</th>
+                </tr>
+                <template if:true={addClicked}>
+                    <tr>
+                        <td>
+                            <lightning-input type="text" name="Name"></lightning-input>
+                        </td>
+                        <td>
+                            <lightning-input type="text" name="Phone"></lightning-input>
 
+                        </td>
+                        <td>
+                            <lightning-button label="Delete" icon-name="utility:delete" onclick={handleConDelete}></lightning-button>
+                        </td>
+                    </tr> 
+                </template>
+            </table>
+        </div>
+        <div class="btn-add">
+            <lightning-button label="Submit" class="btn-add" variant="brand" icon-name="utility:save"
+                onclick={handleSubmit}></lightning-button> 
+        </div>
     </lightning-card> 
 </template>

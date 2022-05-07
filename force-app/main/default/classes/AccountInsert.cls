@@ -1,9 +1,10 @@
 public with sharing class AccountInsert {
     @AuraEnabled
-    public static void insertAcc(account acc){
+    public static Account insertAcc(Account acc){
         try{
-            insert ACC;
-            system.debug('ACC'+ACC);
+            insert acc;
+            system.debug('ACC'+acc);
+            return acc;
         }catch(Exception ex){
             throw new AuraHandledException(ex.getMessage());
         }
